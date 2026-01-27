@@ -1,13 +1,41 @@
 {%extends "layout.html"%}
-
 {%block contenido%}
 
+{%import "_macros.html" as macros%}
     <!-- <div class="container mt-5 pt-4"> -->
-        <h1>USUARIOS</h1>        
-        <h1>{{titulo}}</h1>
+        <h1>USUARIOS</h1>    
+        
+        <!-- El novalidate es para que no valide los campos el html, para que no me gane -->
+       
+        <form method="POST" action="/usuarios" novalidate>
+            {{form.csrf_token}}
+            <input type="hidden" name="csrf_token" value="{{csrf_token}}">
 
-        {% for i in lista%}
-          <li>{{i}}</li>
-        {% endfor%}
+            <div class="mb-3">
+                {{macros.campoNuevo(form.nombre, class='form-control')}}
+            </div>
+            <div class="mb-3">
+                {{macros.campoNuevo(form.matricula, class='form-control')}}
+            </div>
+            <div class="mb-3">
+                {{macros.campoNuevo(form.apaterno, class='form-control')}}
+            </div>
+            <div class="mb-3">
+                {{macros.campoNuevo(form.amaterno, class='form-control')}}
+            </div>
+            <div class="mb-3">
+                {{macros.campoNuevo(form.correo, class='form-control')}}
+            </div>
+            
+        <button type="submit" class="btn btn-primary">Calcular</button>
+    
+        <h1>matricula: {{mat}}</h1>
+        <h1>Nombre: {{nom}}</h1>
+        <h1>A Materno: {{ama}}</h1>
+        <h1>A Paterno: {{apa}}</h1>
+        <h1>E-mail: {{correo}}</h1>
+
+    
+    </form>
     <!-- </div> -->
 {%endblock %}

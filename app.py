@@ -1,18 +1,41 @@
 from flask import Flask, render_template, request
+from flask import flash #Para
+from flask_wtf.csrf import CSRFProtect #Para los tokens
+import forms
 #jinja jinja2 es el motor de parámetros
 app = Flask(__name__)#Nombre del archivo 
 
-@app.route('/index')
+app.secret_key='clave secreta' #Se le envía al formulario para verificar que es quien dice ser o sea tú o tu app
+csrf=CSRFProtect()
+@app.route('/')
 def index():
     titulo = "IDGS803-FLASK"
     lista = ['pedro', 'mario','juan']
     return render_template('index.html', titulo=titulo,lista=lista)
 
-@app.route('/usuarios')
-def usuarios():
-    titulo = "IDGS803-FLASK USUARIOS"
-    lista = ['usuario 1', 'usuario 2','usuario 3']
-    return render_template('usuarios.html', titulo=titulo,lista=lista)
+@app.route("/usuarios", methods=['GET','POST'])
+def usuario():
+    mat = 0
+    nom=''
+    apa=''
+    ama=''
+    correo=''
+
+    usuario_class=forms.UserForm(request.form)
+    print(usuario_class.data)
+    if request.method=='POST' and usuario_class.validate():
+        mat = usuario_class.matricula.data
+        nom = usuario_class.nombre.data
+        apa = usuario_class.apaterno.data
+        ama = usuario_class.apaterno.data
+        correo = usuario_class.correo.data
+    return render_template('usuarios.html', form=usuario_class, mat = mat, nom=nom, apa = apa, ama= ama, correo=correo )
+
+# @app.route('/usuarios')
+# def usuarios():
+#     titulo = "IDGS803-FLASK USUARIOS"
+#     lista = ['usuario 1', 'usuario 2','usuario 3']
+#     return render_template('usuarios.html', titulo=titulo,lista=lista)
 
 @app.route('/alumnos')
 def alumnos():
@@ -83,4 +106,4 @@ def default(param="Juan"):
 
 if __name__ == '__main__':
     app.run(debug=True) #Aquí corremos todo el archivo y con el debug es para o tener que estar bajando y levantando el servidor 
-
+    csrf.init_app(app)

@@ -11,3 +11,16 @@ Crearemos un maro
             placeholder="{{placeholder}}">
     </div>
 {%endmacro%}
+
+{%macro campoNuevo(field)%}
+    <td>{{field.label}}</td>
+    <dd>{{field(**kwargs) | safe}}</dd> 
+    <!-- #Siempre va estar para pintar el campo en el html -->
+    {%if field.errors%}
+        {%for error in field.errors %}
+            <li style="color:red">{{error}}</li>
+        {%endfor%}
+    {%endif%}
+
+{%endmacro%}
+
